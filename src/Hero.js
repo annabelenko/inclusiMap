@@ -3,12 +3,20 @@ import { inclusiMapLogo } from './assets'
 import {FaLocationDot} from "react-icons/fa6"
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
+import { Navigate } from 'react-router-dom';
 
 
 const options = [
     'New York City'
   ];
 const defaultOption = options[0];
+
+function redirect(props){
+    
+        <Navigate to="/map"/>
+
+    
+}
 
 function Hero() {
   return (
@@ -20,7 +28,8 @@ function Hero() {
         </div>
 
         <div>
-            <Dropdown className='w-6/12 flex justify-center mx-auto my-12' options={options}  value="Select a Location" placeholder="Select an option" />
+            <p className='w-6/12 flex justify-center mx-auto mt-12 text-lg text-oliveGreen font-bold'>Choose a Location</p>
+            <Dropdown className='w-6/12 flex justify-center mx-auto mb-12 mt-2' options={options}  value="Select a Location" onChange={redirect} placeholder="Select an option" />
         </div>
        
     </div>
