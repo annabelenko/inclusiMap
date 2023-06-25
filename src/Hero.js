@@ -3,7 +3,7 @@ import { inclusiMapLogo } from './assets'
 import {FaLocationDot} from "react-icons/fa6"
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 
 const options = [
@@ -11,14 +11,21 @@ const options = [
   ];
 const defaultOption = options[0];
 
-function redirect(props){
-    
-        <Navigate to="/map"/>
 
-    
-}
+
 
 function Hero() {
+
+  const navigate = useNavigate();
+  function redirect(){
+  
+    navigate('/map')
+    console.log("yes")
+      
+  }
+  
+
+
   return (
     <div className='bg-backgroundC py-24'>
         <div className='text-oliveGreen text-center'>
