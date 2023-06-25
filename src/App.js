@@ -7,6 +7,7 @@ import Footer from './Footer';
 import Map from './Map';
 import Submit from './Submit';
 import Contact from './Contact';
+import Thanks from './Thanks';
 
 
 
@@ -20,6 +21,7 @@ function App() {
             <Route path="/map" element={<Map/>} exact/>
             <Route path="/submit" element={<Submit/>} exact/>
             <Route path="/contact" element={<Contact/>} exact/>
+            <Route path="/thanks" element={<Thanks/>} exact/>
           </Routes>
       </BrowserRouter>
       <Footer/>
