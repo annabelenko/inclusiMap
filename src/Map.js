@@ -53,8 +53,8 @@ function Map() {
 
   // for google maps api
   const containerStyle = {
-    width: '650px',
-    height: '400px'
+    width: '1250px',
+    height: '720px'
   };
   
   const center = {
