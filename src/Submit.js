@@ -65,7 +65,8 @@ function Submit() {
         } catch (error) {
             console.error("Error adding document: ", error);
         }
-
+        
+        navigate("/thanks")
     };
 
     

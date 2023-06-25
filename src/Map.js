@@ -72,12 +72,7 @@ function Map() {
 
   const [activeMarker, setActiveMarker] = useState("");
 
-  const handleMarkerClick = (marker) => {
-    if (marker == activeMarker) {
-      return;
-    }
-    setActiveMarker(marker);
-  };
+
 
 
   return (
