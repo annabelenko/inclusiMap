@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { auth, db, storage } from "./firebase";
 import { query, collection, where, getDocs, addDoc  } from "firebase/firestore";
 import { async } from "@firebase/util";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate, useLocation } from "react-router-dom";
+import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import { Marker,InfoWindow } from '@react-google-maps/api';
+import Geocode from "react-geocode";
+import { inclusiMapLogo } from './assets'
 
 
 function Map() {
-
-
+  // fetching and putting data of locations
   const [locations, setLocations] = useState([]);
   const [onlywheel, setOnlywheel] = useState([]);
   const [onlypark, setOnlypark] = useState([]);
@@ -48,6 +51,33 @@ function Map() {
     fetchPost();  
   }, []);
 
+  // for google maps api
+  const containerStyle = {
+    width: '650px',
+    height: '400px'
+  };
+  
+  const center = {
+    lat: 40.730,
+    lng: -73.935
+  };
+
+  //returns the lat, lng object
+  const getPosition = (location) =>{
+    const lat = location.lat;
+    const lng = location.lng;
+    const pos = {lat: lat, lng: lng};
+    return pos;
+  };
+
+  const [activeMarker, setActiveMarker] = useState("");
+
+  const handleMarkerClick = (marker) => {
+    if (marker == activeMarker) {
+      return;
+    }
+    setActiveMarker(marker);
+  };
 
 
   return (
@@ -57,9 +87,47 @@ function Map() {
         </h1>
         
         
-        <iframe src="https://www.google.com/maps/embed/v1/view?zoom=10&center=40.7128,-74.0060&key=AIzaSyAkfU18mlMtMx2Tvb6egPt8L9vkcWxOGuY"  className='w-full h-screen' ></iframe>
-        
+      <LoadScript
+        googleMapsApiKey="AIzaSyAkfU18mlMtMx2Tvb6egPt8L9vkcWxOGuY"
+      >
+        <GoogleMap
+          mapContainerStyle={containerStyle}
+          center={center}
+          zoom={10}
+        >
 
+      {locations.map((location) => (
+        <Marker
+          key={location.id}
+          // icon= {inclusiMapLogo}
+          position={getPosition(location)}
+          onClick={() => setActiveMarker(location.id)}
+        >
+         
+         {/* simple jsx logic here ==> boolean logic ? statement_if_true : statement_if_false */}
+         
+         {activeMarker == location.id && 
+            <InfoWindow>
+            <div>
+              <h2>{location.locationname}</h2>
+              <i>{location.locationaddress}</i> <br></br>
+              <b>{location.wheelchair}</b> <br></br>
+              <b>{location.parking}</b><br></br>
+              <p>{"Number: " + location.number}</p>
+            </div>
+            </InfoWindow>
+          }
+
+          
+        </Marker>
+      ))}
+  
+        </GoogleMap>
+      </LoadScript>   
+
+
+
+{/* 
 
 
         {locations.map((location) => (
@@ -73,7 +141,7 @@ function Map() {
           </div>
         ))}
 
-        <h1>></h1>
+        <h1>Only wheelchair Accessibility</h1>
         {onlywheel.map((location) => (
           <div className="location">
               <h2>{location.locationname}</h2>
@@ -95,7 +163,7 @@ function Map() {
               <p>{location.contact}</p>
 
           </div>
-        ))}
+        ))} */}
 
     </div>
   )

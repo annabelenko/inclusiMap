@@ -4,6 +4,7 @@ import { query, collection, where, getDocs, addDoc  } from "firebase/firestore";
 import { async } from "@firebase/util";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate, useLocation } from "react-router-dom";
+import Geocode from "react-geocode";
 
 
 function Submit() {
@@ -17,7 +18,15 @@ function Submit() {
     const [contact, setContact] = useState("");
     const [wheelchair, setWheelchair] = useState("");
     const [parking, setParking] = useState("");
+    const [lat, setlat] = useState("");
+    const [lng, setlng] = useState("");
 
+
+    // geocoding given address
+    Geocode.setApiKey("AIzaSyAkfU18mlMtMx2Tvb6egPt8L9vkcWxOGuY");
+    Geocode.setLanguage("en");
+    Geocode.setLocationType("ROOFTOP");   // ROOFTOP, RANGE_INTERPOLATED, GEOMETRIC_CENTER, APPROXIMATE
+    
 
     const handleChange = async(event) => {
         // we should add this to make it work
@@ -25,6 +34,17 @@ function Submit() {
 
         // sending info to database
         try {
+
+            Geocode.fromAddress(locationaddress).then(
+                (response) => {
+                    const { lat, lng } = response.results[0].geometry.location;
+                    setlat(lat);
+                    setlng(lng);
+                },
+                (error) => {
+                console.error(error);
+                }
+            );
             
             const ref = await addDoc(
                 collection(db, "locations"),
@@ -36,16 +56,16 @@ function Submit() {
                     contact : contact,
                     wheelchair : wheelchair,
                     parking : parking,
+                    lat: lat,
+                    lng: lng
                 }
             );
 
-            // console.log("Document written with ID: ", docRef.id);
 
         } catch (error) {
             console.error("Error adding document: ", error);
         }
 
-        navigate("/thanks");
     };
 
     
